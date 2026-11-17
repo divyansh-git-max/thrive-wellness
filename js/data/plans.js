@@ -1,0 +1,292 @@
+// Weekly training plans. schedule: 7 entries Mon→Sun, each a day key or null (rest).
+// Exercise item: { ex, sets, reps (number or 'range' string) | secs, sides?, rest (seconds between sets), note? }
+// circuit days: do one set of each move in order, then repeat for `sets` rounds.
+
+export const PLANS = [
+  {
+    id: 'beginner-home', name: 'Beginner Full Body', goal: 'Get started', focus: 'strength', level: 'Beginner',
+    weeks: 6, equipment: 'No equipment', color: 'teal',
+    blurb: 'Three short sessions a week to build a base of strength, using just your body weight.',
+    schedule: ['A', null, 'B', null, 'A', null, null],
+    tips: [
+      'Warm up for 3–5 minutes first: march on the spot, arm circles, a few slow squats.',
+      'Pick a version you can do with good form for the full reps — the easier version is still progress.',
+      'When you hit the top of every rep range with good form, make it harder: add 2 reps, lower slowly (3 s), or move to a harder variation.',
+      'Week 4 onwards: add a 4th set to the first two exercises.',
+    ],
+    days: {
+      A: { name: 'Full Body A', exercises: [
+        { ex: 'Bodyweight_Squat', sets: 3, reps: '10–15', rest: 60 },
+        { ex: 'Incline_Push-Up', sets: 3, reps: '8–12', rest: 60, note: 'Use a table or bed edge' },
+        { ex: 'Butt_Lift_Bridge', sets: 3, reps: 12, rest: 45 },
+        { ex: 'Superman', sets: 3, reps: 10, rest: 45 },
+        { ex: 'Plank', sets: 3, secs: 25, rest: 45 },
+      ] },
+      B: { name: 'Full Body B', exercises: [
+        { ex: 'Dumbbell_Rear_Lunge', sets: 3, reps: 8, sides: true, rest: 60, note: 'Body weight is fine' },
+        { ex: 'Pushups', sets: 3, reps: '5–10', rest: 60, note: 'On knees if needed' },
+        { ex: 'bird-dog', sets: 3, reps: 8, sides: true, rest: 30 },
+        { ex: 'Single_Leg_Glute_Bridge', sets: 3, reps: 8, sides: true, rest: 45 },
+        { ex: 'Dead_Bug', sets: 3, reps: 10, rest: 30 },
+        { ex: 'Side_Bridge', sets: 2, secs: 20, sides: true, rest: 30 },
+      ] },
+    },
+  },
+  {
+    id: 'home-dumbbell', name: 'Home Dumbbell Strength', goal: 'Build muscle', focus: 'strength', level: 'Beginner–Intermediate',
+    weeks: 8, equipment: 'A pair of dumbbells', color: 'coral',
+    blurb: 'Full-body strength three times a week with just dumbbells at home.',
+    schedule: ['A', null, 'B', null, 'A', null, null],
+    tips: [
+      'Choose a weight where the last 2 reps of each set feel hard but your form stays clean.',
+      'Progressive overload: when you can do all sets at the top of the range, go up in weight (or add reps).',
+      'Next week, start with Day B on Monday so both days get equal practice.',
+      'Eat enough protein (about 1.2–1.6 g per kg body weight) to build muscle.',
+    ],
+    days: {
+      A: { name: 'Full Body A', exercises: [
+        { ex: 'Goblet_Squat', sets: 3, reps: '10–12', rest: 75 },
+        { ex: 'Dumbbell_Bench_Press', sets: 3, reps: '8–12', rest: 75, note: 'Floor press works without a bench' },
+        { ex: 'One-Arm_Dumbbell_Row', sets: 3, reps: '10–12', sides: true, rest: 60 },
+        { ex: 'Dumbbell_Shoulder_Press', sets: 3, reps: '8–12', rest: 60 },
+        { ex: 'Dumbbell_Bicep_Curl', sets: 2, reps: 12, rest: 45 },
+        { ex: 'Plank', sets: 3, secs: 30, rest: 45 },
+      ] },
+      B: { name: 'Full Body B', exercises: [
+        { ex: 'Stiff-Legged_Dumbbell_Deadlift', sets: 3, reps: '10–12', rest: 75 },
+        { ex: 'Split_Squat_with_Dumbbells', sets: 3, reps: 10, sides: true, rest: 60 },
+        { ex: 'Incline_Dumbbell_Press', sets: 3, reps: '8–12', rest: 75 },
+        { ex: 'Bent_Over_Two-Dumbbell_Row', sets: 3, reps: '10–12', rest: 60 },
+        { ex: 'Side_Lateral_Raise', sets: 3, reps: '12–15', rest: 45 },
+        { ex: 'Tricep_Dumbbell_Kickback', sets: 2, reps: 12, rest: 45 },
+        { ex: 'Russian_Twist', sets: 3, reps: 16, rest: 30 },
+      ] },
+    },
+  },
+  {
+    id: 'fat-loss', name: 'Fat Loss & Conditioning', goal: 'Lose fat', focus: 'cardio', level: 'Beginner–Intermediate',
+    weeks: 6, equipment: 'Dumbbells optional', color: 'coral',
+    blurb: 'Two strength circuits and two cardio sessions a week to burn calories and build fitness.',
+    schedule: ['A', 'C', null, 'B', null, 'D', null],
+    tips: [
+      'Circuits: do one set of each move back-to-back (short rests), rest 60–90 s, then repeat.',
+      'Aim for 7,000–10,000 steps a day on top of these sessions — walking burns more than you think.',
+      'Fat loss is mostly about food: a small calorie deficit, plenty of protein and vegetables.',
+      'Can\'t talk in short sentences during cardio? Slow down a little.',
+    ],
+    days: {
+      A: { name: 'Strength Circuit A', circuit: true, rest: 20, roundRest: 75, exercises: [
+        { ex: 'Goblet_Squat', sets: 3, reps: 12 },
+        { ex: 'Pushups', sets: 3, reps: 10 },
+        { ex: 'One-Arm_Dumbbell_Row', sets: 3, reps: 10, sides: true },
+        { ex: 'Dumbbell_Rear_Lunge', sets: 3, reps: 10, sides: true },
+        { ex: 'Mountain_Climbers', sets: 3, secs: 30 },
+        { ex: 'Plank', sets: 3, secs: 30 },
+      ] },
+      B: { name: 'Strength Circuit B', circuit: true, rest: 20, roundRest: 75, exercises: [
+        { ex: 'Dumbbell_Step_Ups', sets: 3, reps: 10, sides: true },
+        { ex: 'Dumbbell_Shoulder_Press', sets: 3, reps: 12 },
+        { ex: 'Stiff-Legged_Dumbbell_Deadlift', sets: 3, reps: 12 },
+        { ex: 'Bench_Dips', sets: 3, reps: 10 },
+        { ex: 'Russian_Twist', sets: 3, reps: 20 },
+        { ex: 'Air_Bike', sets: 3, reps: 20 },
+      ] },
+      C: { name: 'Cardio Intervals', circuit: true, rest: 20, roundRest: 60, note: 'Follow with a 20–30 minute brisk walk.', exercises: [
+        { ex: 'jumping-jack', sets: 4, secs: 40 },
+        { ex: 'Freehand_Jump_Squat', sets: 4, secs: 30 },
+        { ex: 'Fast_Skipping', sets: 4, secs: 40 },
+        { ex: 'Mountain_Climbers', sets: 4, secs: 30 },
+      ] },
+      D: { name: 'Cardio + Core', circuit: true, rest: 20, roundRest: 60, exercises: [
+        { ex: 'Rope_Jumping', sets: 3, secs: 45, note: 'Or jumping jacks' },
+        { ex: 'Star_Jump', sets: 3, reps: 10 },
+        { ex: 'Dead_Bug', sets: 3, reps: 12 },
+        { ex: 'Side_Bridge', sets: 3, secs: 25, sides: true },
+        { ex: 'Reverse_Crunch', sets: 3, reps: 12 },
+      ] },
+    },
+  },
+  {
+    id: 'upper-lower', name: 'Upper / Lower Split', goal: 'Build muscle', focus: 'strength', level: 'Intermediate',
+    weeks: 8, equipment: 'Gym or dumbbells', color: 'indigo',
+    blurb: 'Four days a week: each muscle trained twice, with enough recovery to grow.',
+    schedule: ['U1', 'L1', null, 'U2', 'L2', null, null],
+    tips: [
+      'Start each session with 1–2 lighter warm-up sets of the first exercise.',
+      'Track your weights. Each week try to add one rep or a little weight to the main lifts.',
+      'Leave 1–2 reps "in the tank" on most sets; push the last set harder.',
+      'Every 6–8 weeks, take an easier week (half the sets) to recover.',
+    ],
+    days: {
+      U1: { name: 'Upper A', exercises: [
+        { ex: 'Dumbbell_Bench_Press', sets: 4, reps: '8–10', rest: 90 },
+        { ex: 'One-Arm_Dumbbell_Row', sets: 4, reps: '8–10', sides: true, rest: 90 },
+        { ex: 'Dumbbell_Shoulder_Press', sets: 3, reps: 10, rest: 75 },
+        { ex: 'Wide-Grip_Lat_Pulldown', sets: 3, reps: '10–12', rest: 75, note: 'Or pull-ups' },
+        { ex: 'Side_Lateral_Raise', sets: 3, reps: '12–15', rest: 45 },
+        { ex: 'Dumbbell_Bicep_Curl', sets: 3, reps: '10–12', rest: 45 },
+        { ex: 'Standing_Dumbbell_Triceps_Extension', sets: 3, reps: '10–12', rest: 45 },
+      ] },
+      L1: { name: 'Lower A', exercises: [
+        { ex: 'Barbell_Squat', sets: 4, reps: '6–8', rest: 120, note: 'Or goblet squat' },
+        { ex: 'Stiff-Legged_Dumbbell_Deadlift', sets: 3, reps: '8–10', rest: 90 },
+        { ex: 'Split_Squat_with_Dumbbells', sets: 3, reps: 10, sides: true, rest: 75 },
+        { ex: 'Lying_Leg_Curls', sets: 3, reps: '10–12', rest: 60, note: 'Or stability-ball leg curl' },
+        { ex: 'Standing_Dumbbell_Calf_Raise', sets: 4, reps: '12–15', rest: 45 },
+        { ex: 'Plank', sets: 3, secs: 40, rest: 45 },
+      ] },
+      U2: { name: 'Upper B', exercises: [
+        { ex: 'Incline_Dumbbell_Press', sets: 4, reps: '8–10', rest: 90 },
+        { ex: 'Seated_Cable_Rows', sets: 4, reps: 10, rest: 75, note: 'Or bent-over dumbbell row' },
+        { ex: 'Arnold_Dumbbell_Press', sets: 3, reps: 10, rest: 75 },
+        { ex: 'Chin-Up', sets: 3, reps: 'max', rest: 90, note: 'Or band-assisted / lat pulldown' },
+        { ex: 'Face_Pull', sets: 3, reps: 15, rest: 45, note: 'Or band pull-apart' },
+        { ex: 'Hammer_Curls', sets: 3, reps: 12, rest: 45 },
+        { ex: 'Bench_Dips', sets: 3, reps: 12, rest: 45 },
+      ] },
+      L2: { name: 'Lower B', exercises: [
+        { ex: 'Romanian_Deadlift', sets: 4, reps: '6–8', rest: 120, note: 'Or dumbbell RDL' },
+        { ex: 'Leg_Press', sets: 3, reps: '10–12', rest: 90, note: 'Or goblet squat' },
+        { ex: 'Dumbbell_Rear_Lunge', sets: 3, reps: 10, sides: true, rest: 75 },
+        { ex: 'Single_Leg_Glute_Bridge', sets: 3, reps: 12, sides: true, rest: 45 },
+        { ex: 'Seated_Calf_Raise', sets: 3, reps: 15, rest: 45, note: 'Or standing calf raise' },
+        { ex: 'Dead_Bug', sets: 3, reps: 10, rest: 30 },
+      ] },
+    },
+  },
+  {
+    id: 'ppl', name: 'Push / Pull / Legs', goal: 'Build muscle', focus: 'strength', level: 'Intermediate–Advanced',
+    weeks: 8, equipment: 'Gym', color: 'violet',
+    blurb: 'Classic 6-day gym split. High volume for experienced lifters.',
+    schedule: ['Push', 'Pull', 'Legs', 'Push', 'Pull', 'Legs', null],
+    tips: [
+      'Only choose this if you can recover from 6 days a week — sleep and food matter even more here.',
+      'Main lifts: add 2.5 kg when you complete all sets at the top of the range.',
+      'Short on time? Run it as 3 days (Push, Pull, Legs once each).',
+      'Keep 1–2 reps in reserve on isolation moves; save the hard efforts for main lifts.',
+    ],
+    days: {
+      Push: { name: 'Push (chest, shoulders, triceps)', exercises: [
+        { ex: 'Barbell_Bench_Press_-_Medium_Grip', sets: 4, reps: '6–8', rest: 150 },
+        { ex: 'Incline_Dumbbell_Press', sets: 3, reps: '8–10', rest: 90 },
+        { ex: 'Standing_Military_Press', sets: 3, reps: '6–8', rest: 120 },
+        { ex: 'Side_Lateral_Raise', sets: 4, reps: '12–15', rest: 45 },
+        { ex: 'Triceps_Pushdown_-_Rope_Attachment', sets: 3, reps: '10–12', rest: 60 },
+        { ex: 'Cable_Crossover', sets: 3, reps: '12–15', rest: 60 },
+      ] },
+      Pull: { name: 'Pull (back, biceps)', exercises: [
+        { ex: 'Barbell_Deadlift', sets: 3, reps: 5, rest: 180 },
+        { ex: 'Pullups', sets: 4, reps: '6–10', rest: 120, note: 'Or lat pulldown' },
+        { ex: 'Bent_Over_Barbell_Row', sets: 3, reps: '8–10', rest: 90 },
+        { ex: 'Face_Pull', sets: 3, reps: 15, rest: 45 },
+        { ex: 'Barbell_Curl', sets: 3, reps: '8–10', rest: 60 },
+        { ex: 'Hammer_Curls', sets: 3, reps: 12, rest: 45 },
+      ] },
+      Legs: { name: 'Legs (quads, hamstrings, glutes)', exercises: [
+        { ex: 'Barbell_Squat', sets: 4, reps: '6–8', rest: 150 },
+        { ex: 'Romanian_Deadlift', sets: 3, reps: '8–10', rest: 120 },
+        { ex: 'Leg_Press', sets: 3, reps: '10–12', rest: 90 },
+        { ex: 'Leg_Extensions', sets: 3, reps: '12–15', rest: 60 },
+        { ex: 'Lying_Leg_Curls', sets: 3, reps: '10–12', rest: 60 },
+        { ex: 'Seated_Calf_Raise', sets: 4, reps: 15, rest: 45 },
+      ] },
+    },
+  },
+  {
+    id: 'posture-back', name: 'Posture & Back Health', goal: 'Fix posture', focus: 'posture', level: 'Beginner',
+    weeks: 4, equipment: 'Resistance band (optional)', color: 'teal',
+    blurb: '15 minutes, five days a week, to undo desk posture, ease neck and back stiffness and build a stronger upper back.',
+    schedule: ['A', 'B', 'A', 'B', 'A', null, null],
+    tips: [
+      'Consistency beats intensity: short and frequent sessions work best.',
+      'Move slowly and feel the right muscles working. Nothing should hurt.',
+      'Take a 2-minute posture break (chin tucks + chest opener) every hour you sit.',
+      'If you have ongoing or sharp pain, see a physiotherapist.',
+    ],
+    days: {
+      A: { name: 'Neck, shoulders & upper back', exercises: [
+        { ex: 'chin-tuck', sets: 2, reps: 10, rest: 20, note: 'Hold each 3–5 s' },
+        { ex: 'wall-angel', sets: 2, reps: 10, rest: 30 },
+        { ex: 'Band_Pull_Apart', sets: 3, reps: 15, rest: 30, note: 'No band? Do reverse snow angels lying face down' },
+        { ex: 'prone-y-raise', sets: 2, reps: 10, rest: 30 },
+        { ex: 'External_Rotation_with_Band', sets: 2, reps: 12, sides: true, rest: 30 },
+        { ex: 'Elbows_Back', sets: 2, secs: 30, rest: 15 },
+        { ex: 'Side_Neck_Stretch', sets: 1, secs: 30, sides: true, rest: 10 },
+      ] },
+      B: { name: 'Core, hips & lower back', exercises: [
+        { ex: 'Cat_Stretch', sets: 1, secs: 60, rest: 10 },
+        { ex: 'Dead_Bug', sets: 3, reps: 8, rest: 30 },
+        { ex: 'bird-dog', sets: 3, reps: 8, sides: true, rest: 30 },
+        { ex: 'Butt_Lift_Bridge', sets: 3, reps: 12, rest: 30 },
+        { ex: 'clamshell', sets: 2, reps: 15, sides: true, rest: 20 },
+        { ex: 'hip-hinge', sets: 2, reps: 10, rest: 30 },
+        { ex: 'Kneeling_Hip_Flexor', sets: 2, secs: 30, sides: true, rest: 10 },
+      ] },
+    },
+  },
+  {
+    id: 'flexibility', name: 'Flexibility & Yoga', goal: 'Mobility', focus: 'yoga', level: 'Beginner',
+    weeks: 6, equipment: 'Yoga mat', color: 'violet',
+    blurb: 'Four relaxing sessions a week to loosen tight hips, hamstrings and back, and improve balance.',
+    schedule: ['A', null, 'B', null, 'A', null, 'B'],
+    tips: [
+      'Breathe slowly through the nose; let each exhale take you a little deeper.',
+      'Stretch to mild tension, never pain. Flexibility improves over weeks, not minutes.',
+      'Great after a workout or before bed.',
+    ],
+    days: {
+      A: { name: 'Morning flow', exercises: [
+        { ex: 'Upward_Stretch', sets: 2, secs: 20, rest: 5 },
+        { ex: 'Standing_Toe_Touches', sets: 2, secs: 30, rest: 5 },
+        { ex: 'Cat_Stretch', sets: 1, secs: 60, rest: 5 },
+        { ex: 'downward-dog', sets: 3, secs: 30, rest: 10 },
+        { ex: 'cobra', sets: 3, secs: 20, rest: 10 },
+        { ex: 'warrior-2', sets: 2, secs: 30, sides: true, rest: 10 },
+        { ex: 'tree-pose', sets: 2, secs: 30, sides: true, rest: 10 },
+        { ex: 'Childs_Pose', sets: 1, secs: 60, rest: 0 },
+      ] },
+      B: { name: 'Hips & hamstrings', exercises: [
+        { ex: 'Worlds_Greatest_Stretch', sets: 2, secs: 30, sides: true, rest: 5 },
+        { ex: 'Kneeling_Hip_Flexor', sets: 2, secs: 45, sides: true, rest: 5 },
+        { ex: 'Seated_Floor_Hamstring_Stretch', sets: 2, secs: 45, sides: true, rest: 5 },
+        { ex: 'Ankle_On_The_Knee', sets: 2, secs: 45, sides: true, rest: 5 },
+        { ex: 'Hamstring_Stretch', sets: 2, secs: 45, sides: true, rest: 5 },
+        { ex: 'Knee_Across_The_Body', sets: 2, secs: 45, sides: true, rest: 5 },
+        { ex: 'Hug_Knees_To_Chest', sets: 1, secs: 60, rest: 0 },
+      ] },
+    },
+  },
+  {
+    id: 'core-abs', name: 'Core & Abs', goal: 'Strong core', focus: 'strength', level: 'Beginner–Intermediate',
+    weeks: 6, equipment: 'No equipment (band optional)', color: 'amber',
+    blurb: 'Three 15-minute sessions a week for a strong, stable midsection that protects your back.',
+    schedule: ['A', null, 'B', null, 'A', null, null],
+    tips: [
+      'A strong core is about bracing and control, not endless crunches.',
+      'Visible abs come mainly from lower body fat — food and overall activity matter most.',
+      'Progress planks by adding 5–10 seconds each week.',
+    ],
+    days: {
+      A: { name: 'Stability', exercises: [
+        { ex: 'Plank', sets: 3, secs: 30, rest: 30 },
+        { ex: 'Dead_Bug', sets: 3, reps: 10, rest: 30 },
+        { ex: 'Side_Bridge', sets: 3, secs: 25, sides: true, rest: 30 },
+        { ex: 'bird-dog', sets: 3, reps: 8, sides: true, rest: 30 },
+        { ex: 'Pallof_Press', sets: 3, reps: 10, sides: true, rest: 30, note: 'Band or cable' },
+      ] },
+      B: { name: 'Strength & rotation', exercises: [
+        { ex: 'Reverse_Crunch', sets: 3, reps: 12, rest: 30 },
+        { ex: 'Air_Bike', sets: 3, reps: 20, rest: 30 },
+        { ex: 'Russian_Twist', sets: 3, reps: 20, rest: 30 },
+        { ex: 'Flat_Bench_Lying_Leg_Raise', sets: 3, reps: 10, rest: 30 },
+        { ex: 'Mountain_Climbers', sets: 3, secs: 30, rest: 30 },
+      ] },
+    },
+  },
+];
+
+export const findPlan = (id) => PLANS.find((p) => p.id === id);
+export const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+/** Index into a plan's schedule for a JS Date (Mon = 0). */
+export const scheduleIndex = (d = new Date()) => (d.getDay() + 6) % 7;
+export const daysPerWeek = (p) => p.schedule.filter(Boolean).length;

@@ -1,0 +1,8 @@
+# Local test helpers (they can replace your data with sample data) — not published
+tools/seed.html
+tools/phone.html
+tools/e2e.html
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
