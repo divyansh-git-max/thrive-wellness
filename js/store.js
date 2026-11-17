@@ -16,7 +16,7 @@ function defaults() {
   return {
     version: 1,
     profile: { name: '', heightCm: null, waterGoal: 8, glassMl: 250, sleepGoal: 8, weightGoal: null, onboarded: false },
-    settings: { theme: 'auto', voice: true, sound: true },
+    settings: { theme: 'auto', layout: 'auto', voice: true, sound: true },
     habits: structuredClone(DEFAULT_HABITS),
     days: {},       // 'YYYY-MM-DD' -> day record
     metrics: [],    // [{ date, weight, waist, hips, chest, arm, bodyFat, rhr }]

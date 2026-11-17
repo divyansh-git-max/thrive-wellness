@@ -23,7 +23,11 @@ Keep the window open while you use it. Requires Node.js (already installed).
 | **Mind** | Mood check-ins, sleep log, breathing (box, 4-7-8, physiological sigh, coherent), 5-4-3-2-1 grounding, body scan, mindful minute, gratitude, CBT reframe, brain dump, journal |
 | **Progress** | 7/30-day charts, body measurements (weight, waist…) with BMI, habit streaks & heatmaps |
 
-Settings: name, height, goals, habit editor, theme, workout sound/voice, **export / import backup**, erase data.
+Settings: name, height, goals, habit editor, **view (Auto / Mobile / Web)**, theme, workout sound/voice, **export / import backup**, erase data.
+
+**Views:** *Mobile* is the phone layout (light, dark or auto theme). *Web* is a desktop layout with a sidebar, two-column cards and centred dialogs, and is always light. *Auto* picks Web on screens 1000px or wider. Switch any time from the sidebar, the Today header or Settings.
+
+**Food data:** checked against USDA FoodData Central (SR Legacy) — macros and listed vitamins/minerals match within rounding. Indian foods not in USDA (paneer, soya chunks, amla, ragi, roti) use IFCT-based figures and are labelled approximate; whey uses typical label values. Each food shows its source. Health tips were checked against published research and worded to match the strength of the evidence.
 
 ## Project layout
 

@@ -1,6 +1,6 @@
 import { state, getDay, editDay, todayKey, addDays, lastNDays, MEALS, MEAL_TAGS, plateScore } from '../store.js';
 import { esc, icon, ring, barChart, dow, niceDate, openSheet } from '../ui.js';
-import { NUTRIENTS, GOALS, FOODS, DIETS, DIET_LABEL, fitsDiet, foodsFor } from '../data/foods.js';
+import { NUTRIENTS, GOALS, FOODS, DIETS, DIET_LABEL, fitsDiet, foodsFor, SOURCES } from '../data/foods.js';
 import { NUTRITION_TIPS } from '../data/mind.js';
 import { rerender } from '../router.js';
 
@@ -162,7 +162,7 @@ function foodsView(goalId) {
   <div class="food-list" id="foodList">${foodList(goal?.id)}</div>
   <div class="section-head"><h2>Nutrient guide</h2></div>
   <div class="nutrient-pills">${Object.entries(NUTRIENTS).map(([id, n]) => `<button class="nutrient-pill" data-act="nutrient-open" data-id="${id}">${n.emoji} ${esc(n.name)}</button>`).join('')}</div>
-  <p class="fine">Values are typical amounts per serving from food composition tables, rounded; brands, varieties and cooking change them. "High" ≈ 20%+ of an adult's daily need, "Good source" ≈ 10–19%. General guidance only — not medical advice.</p>`;
+  <p class="fine">Nutrition values were checked against USDA FoodData Central; Indian foods not in USDA use IFCT-based figures and are marked approximate. "High" = 20%+ of the daily value, "Good source" = 10–19%. Health tips reflect published research but effects are usually modest. General guidance only — not medical advice.</p>`;
 }
 
 export function onFoodSearch(input) {
@@ -194,7 +194,7 @@ function foodSheet(id) {
     <h3 class="sec">Good for</h3>
     <div class="chips">${f.goals.map((g) => { const G = GOALS.find((x) => x.id === g); return G ? `<a class="chip-btn" href="#/nourish/foods/${g}">${G.emoji} ${esc(G.name)}</a>` : ''; }).join('')}</div>
     ${f.tip ? `<div class="food-tip">💡 ${esc(f.tip)}</div>` : ''}
-    <p class="fine">Typical values; brands, varieties and cooking vary.</p>
+    <p class="fine">Source: ${esc(SOURCES[f.src])}. Brands, varieties and cooking change values a little.</p>
   </div>`, { cls: 'sheet-tall' });
 }
 

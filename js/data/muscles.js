@@ -80,7 +80,8 @@ export function impactSentence(it) {
 
 /** Short muscle list for list rows, e.g. "Quads, glutes, hamstrings". */
 export function muscleSummary(ex, n = 3) {
-  const names = [...ex.primary, ...ex.secondary].filter((m, i, a) => a.indexOf(m) === i && MUSCLES[m]).map((m) => MUSCLES[m].short);
+  const fx = FIX[ex.id];
+  const names = [...(fx?.primary || ex.primary), ...(fx?.secondary || ex.secondary)].filter((m, i, a) => a.indexOf(m) === i && MUSCLES[m]).map((m) => MUSCLES[m].short);
   const s = names.slice(0, n).join(', ');
   return s ? s[0].toUpperCase() + s.slice(1) : '';
 }

@@ -1,7 +1,7 @@
 import { state, save, flush, exportData, importData, resetAll, uid, DEFAULT_HABITS } from '../store.js';
 import { esc, icon, toast } from '../ui.js';
 import { rerender, go } from '../router.js';
-import { applyTheme, installPrompt, promptInstall } from '../app.js';
+import { applyTheme, installPrompt, promptInstall, layout, WEB_MIN } from '../app.js';
 
 export function view(sub) {
   if (sub === 'habits') return habitsView();
@@ -29,8 +29,11 @@ export function view(sub) {
 
   <div class="card">
     <h2>Preferences</h2>
-    <div class="label">Theme</div>
-    <div class="seg small">${[['auto', 'Auto'], ['light', 'Light'], ['dark', 'Dark']].map(([v, l]) => `<button class="${s.theme === v ? 'on' : ''}" data-act="theme" data-v="${v}">${l}</button>`).join('')}</div>
+    <div class="label">View</div>
+    <div class="seg small">${[['auto', 'Auto'], ['mobile', '📱 Mobile'], ['web', '🖥️ Web']].map(([v, l]) => `<button class="${(s.layout || 'auto') === v ? 'on' : ''}" data-act="layout-set" data-v="${v}">${l}</button>`).join('')}</div>
+    <p class="muted small">Web view is a desktop layout (sidebar, wider pages) and always uses light mode. Auto picks web view on screens ${WEB_MIN}px or wider. Now showing: <b>${layout() === 'web' ? 'Web' : 'Mobile'}</b>.</p>
+    <div class="label">Theme (mobile view)</div>
+    ${layout() === 'web' ? '<p class="muted small">Dark mode is available in mobile view. Web view stays light.</p>' : `<div class="seg small">${[['auto', 'Auto'], ['light', 'Light'], ['dark', 'Dark']].map(([v, l]) => `<button class="${s.theme === v ? 'on' : ''}" data-act="theme" data-v="${v}">${l}</button>`).join('')}</div>`}
     <label class="switch-row"><span>Workout sounds</span><input type="checkbox" data-act="toggle" data-k="sound" ${s.sound ? 'checked' : ''}><i></i></label>
     <label class="switch-row"><span>Voice coach (reads out the next move)</span><input type="checkbox" data-act="toggle" data-k="voice" ${s.voice ? 'checked' : ''}><i></i></label>
   </div>

@@ -229,7 +229,7 @@ function render() {
       <div class="p-big ${timed ? '' : 'reps'}" id="pBig">${amount}</div>
       <div class="p-bar"><div id="pBar"></div></div>
       ${P.phase === 'work' && showEx.ex.cues[0] ? `<div class="p-cue">${icon('check')} ${esc(showEx.ex.cues[0])}</div>` : ''}
-      ${P.phase === 'work' && n ? `<div class="p-next">Next: ${esc(n.ex.name)}</div>` : ''}
+      ${P.phase === 'work' && n ? `<div class="p-next">Next: ${esc(n.ex.id === s.ex.id && n.label ? n.label : n.ex.name)}</div>` : ''}
     </div>
     <div class="p-controls">
       <button class="icon-btn lg" data-pact="prev" aria-label="Previous" ${P.i === 0 ? 'disabled' : ''}>${icon('prev')}</button>

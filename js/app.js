@@ -18,7 +18,15 @@ const ACTIONS = {
 
 const main = document.getElementById('main');
 const nav = document.getElementById('nav');
-nav.innerHTML = NAV.map(([id, l, ic]) => `<a href="#/${id}" data-tab="${id}">${icon(ic)}<span>${l}</span></a>`).join('');
+function renderNav() {
+  const web = document.documentElement.dataset.layout === 'web';
+  nav.innerHTML = `<div class="nav-brand"><img src="icons/icon.svg" alt="" width="32" height="32"><b>Thrive</b></div>` +
+    NAV.map(([id, l, ic]) => `<a href="#/${id}" data-tab="${id}">${icon(ic)}<span>${l}</span></a>`).join('') +
+    `<a href="#/settings" data-tab="settings" class="nav-settings">${icon('gear')}<span>Settings</span></a>` +
+    `<button class="nav-toggle" data-act="layout-toggle">${icon(web ? 'phone' : 'monitor')}<span>${web ? 'Switch to mobile view' : 'Switch to web view'}</span></button>`;
+  const [name] = route();
+  for (const a of nav.querySelectorAll('a')) a.classList.toggle('on', a.dataset.tab === (VIEWS[name] ? name : 'today'));
+}
 
 let lastRoute = '';
 let lastDay = todayKey();
@@ -73,9 +81,17 @@ document.addEventListener('visibilitychange', () => {
 });
 window.addEventListener('storage-error', () => toast('Storage is full — export a backup and clear old data.'));
 
-// ---------- theme ----------
+// ---------- layout (web vs mobile) & theme ----------
+export const WEB_MIN = 1000; // auto mode picks web view at this width or wider
+/** 'web' or 'mobile'. Web view is the desktop layout and is always light. */
+export function layout() {
+  const l = state.settings.layout || 'auto';
+  return l === 'auto' ? (window.innerWidth >= WEB_MIN ? 'web' : 'mobile') : l;
+}
 export function applyTheme() {
-  const t = state.settings.theme;
+  const web = layout() === 'web';
+  document.documentElement.dataset.layout = web ? 'web' : 'mobile';
+  const t = web ? 'light' : state.settings.theme;
   if (t === 'auto') document.documentElement.removeAttribute('data-theme');
   else document.documentElement.setAttribute('data-theme', t);
   const dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
@@ -83,6 +99,22 @@ export function applyTheme() {
 }
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', applyTheme);
 applyTheme();
+renderNav();
+let lastLayout = layout();
+let resizeTimer = 0;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => { const l = layout(); if (l !== lastLayout) { lastLayout = l; applyTheme(); renderNav(); rerender(); } }, 150);
+});
+ACTIONS['layout-toggle'] = () => {
+  state.settings.layout = layout() === 'web' ? 'mobile' : 'web';
+  save(); lastLayout = layout(); applyTheme(); renderNav(); render();
+  toast(layout() === 'web' ? 'Web view (light mode)' : 'Mobile view');
+};
+ACTIONS['layout-set'] = (el) => {
+  state.settings.layout = el.dataset.v;
+  save(); lastLayout = layout(); applyTheme(); renderNav(); render();
+};
 
 // ---------- install (PWA) ----------
 let deferredInstall = null;

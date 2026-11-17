@@ -44,7 +44,7 @@ export function view() {
       <div class="muted small">${esc(date)}</div>
       <h1>${greeting()}${p.name ? ', ' + esc(p.name) : ''}</h1>
     </div>
-    <a class="icon-btn" href="#/settings" aria-label="Settings">${icon('gear')}</a>
+    <div class="top-actions"><button class="icon-btn view-toggle" data-act="layout-toggle" aria-label="Switch to web view" title="Switch to web view">${icon('monitor')}</button><a class="icon-btn" href="#/settings" aria-label="Settings">${icon('gear')}</a></div>
   </header>
 
   <section class="glance">
