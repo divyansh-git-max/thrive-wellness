@@ -33,15 +33,27 @@ function planWeekDone(plan) {
   for (let i = 0; i <= idx; i++) n += (getDay(addDays(monday, i)).workouts || []).filter((w) => w.planId === plan.id).length;
   return n;
 }
-export function todaysPlanDay() {
-  const plan = state.plan && findPlan(state.plan.id);
-  if (!plan) return null;
-  const key = plan.schedule[scheduleIndex()];
-  const doneToday = (getDay().workouts || []).some((w) => w.planId === plan.id);
-  return { plan, key, day: key ? plan.days[key] : null, doneToday, weekDone: planWeekDone(plan) };
+/** Plans being followed, in the order they were added. */
+export const activePlans = () => (state.plans || []).map((x) => findPlan(x.id)).filter(Boolean);
+const isFollowing = (id) => (state.plans || []).some((x) => x.id === id);
+/** Today's session for each followed plan: [{ plan, key, day, doneToday, weekDone }]. */
+export function todaysPlanDays() {
+  return activePlans().map((plan) => {
+    const key = plan.schedule[scheduleIndex()];
+    const doneToday = (getDay().workouts || []).some((w) => w.planId === plan.id);
+    return { plan, key, day: key ? plan.days[key] : null, doneToday, weekDone: planWeekDone(plan) };
+  });
+}
+/** Gentle note when demanding plans are combined. */
+export function planOverlapNote(plans = activePlans()) {
+  const hard = plans.filter((p) => p.focus === 'strength' || p.focus === 'cardio');
+  if (hard.length >= 2) return 'You are combining ' + hard.length + ' training plans (' + hard.map((p) => p.name).join(' + ') + '). That is a lot of hard sessions: keep at least one full rest day, sleep well, and drop a session if you feel run down. One strength plan plus a posture or mobility plan is easier to recover from.';
+  const busy = DAY_NAMES.filter((_, i) => plans.filter((p) => p.schedule[i]).length >= 3);
+  if (busy.length) return busy.join(', ') + (busy.length > 1 ? ' have' : ' has') + ' three or more sessions. Split them across the day, or skip the lighter one if you are short on time.';
+  return '';
 }
 const planCard = (p) => {
-  const active = state.plan?.id === p.id;
+  const active = isFollowing(p.id);
   return `<a class="plan-card c-${p.color}" href="#/move/plan/${p.id}">
     <div class="plan-card-top"><span class="eyebrow">${esc(p.goal)}</span>${active ? '<span class="pill on">Following</span>' : ''}</div>
     <b>${esc(p.name)}</b>
@@ -50,24 +62,44 @@ const planCard = (p) => {
     <div class="plan-meta"><span>${esc(p.equipment)}</span></div>
   </a>`;
 };
+const PLAN_SHORT = { 'beginner-home': 'Beginner', 'home-dumbbell': 'Dumbbell', 'fat-loss': 'Fat loss', 'upper-lower': 'Split', ppl: 'PPL', 'posture-back': 'Posture', flexibility: 'Yoga', 'core-abs': 'Core' };
+/** Short label for a plan session, e.g. "Dumbbell A", "Posture B", "Upper A", "Push". */
+const sessionLabel = (p, key) => (/^[A-D]$/.test(key) ? `${PLAN_SHORT[p.id] || p.name.split(' ')[0]} ${key}` : p.days[key].name.split(' (')[0]);
+function combinedWeek(plans) {
+  const ti = scheduleIndex();
+  return `<div class="week-plan combined">${DAY_NAMES.map((d, i) => {
+    const sessions = plans.filter((p) => p.schedule[i]).map((p) => ({ p, name: sessionLabel(p, p.schedule[i]) }));
+    return `<div class="wp ${sessions.length ? 'on' : ''} ${i === ti ? 'today' : ''}"><span>${d}</span>${sessions.length ? sessions.map((s) => `<b title="${esc(s.p.name + ': ' + s.p.days[s.p.schedule[i]].name)}">${esc(s.name)}</b>`).join('') : '<b>Rest</b>'}</div>`;
+  }).join('')}</div>`;
+}
 function plansView() {
-  const t = todaysPlanDay();
-  return `
-  ${t ? `<div class="card c-${t.plan.color} plan-now">
-    <div class="eyebrow">Your plan · week progress ${t.weekDone}/${daysPerWeek(t.plan)}</div>
+  const today = todaysPlanDays();
+  const plans = today.map((t) => t.plan);
+  const note = planOverlapNote(plans);
+  const card = (t) => `<div class="card c-${t.plan.color} plan-now">
+    <div class="eyebrow">${esc(t.plan.goal)} · week progress ${t.weekDone}/${daysPerWeek(t.plan)}</div>
     <h2>${esc(t.plan.name)}</h2>
     ${t.day ? `<p class="muted">Today: <b>${esc(t.day.name)}</b> · ~${planDayMins(t.plan, t.key)} min${t.doneToday ? ' · done ✓' : ''}</p>
       <button class="btn btn-primary btn-block" data-act="plan-start" data-id="${t.plan.id}" data-day="${t.key}">${icon('play')} ${t.doneToday ? 'Do it again' : 'Start today\'s workout'}</button>`
-      : `<p class="muted">Rest day today. A walk or the Desk Posture Reset is a great way to recover.</p>`}
-    <a class="link" href="#/move/plan/${t.plan.id}">View full plan</a>
-  </div>` : `<p class="muted small intro-text">Pick a plan that matches your goal. Each one tells you what to do on which day, with sets, reps and rest. Follow it and Today shows you each day's workout.</p>`}
+      : `<p class="muted">Rest day on this plan today.</p>`}
+    <div class="plan-now-links"><a class="link" href="#/move/plan/${t.plan.id}">View full plan</a><button class="link-btn" data-act="plan-stop" data-id="${t.plan.id}">Stop following</button></div>
+  </div>`;
+  return `
+  ${today.length ? `
+  <div class="section-head first"><h2>Your plans</h2><span class="muted small">${plans.length} active — follow as many as you like</span></div>
+  ${today.map(card).join('')}
+  ${plans.length > 1 ? `<div class="card plan-week-card"><h2>Your combined week</h2>${combinedWeek(plans)}${note ? `<p class="plan-note">${esc(note)}</p>` : ''}</div>` : ''}
+  <div class="section-head"><h2>Add another plan</h2></div>`
+  : `<p class="muted small intro-text">Pick one or more plans that match your goals — for example a strength plan plus Posture & Back Health. Each tells you what to do on which day, with sets, reps and rest, and Today shows every session that's due.</p>`}
   <div class="plan-list">${PLANS.map(planCard).join('')}</div>`;
 }
 function planView(id) {
   const p = findPlan(id);
   if (!p) return `<header class="top"><a class="icon-btn" href="#/move/plans">${icon('left')}</a><h1>Not found</h1></header>`;
-  const active = state.plan?.id === p.id;
+  const active = isFollowing(p.id);
   const ti = scheduleIndex();
+  const others = activePlans().filter((x) => x.id !== p.id);
+  const note = !active && others.length ? planOverlapNote([...others, p]) : '';
   const keys = Object.keys(p.days);
   const avgMins = Math.round(keys.reduce((s, k) => s + planDayMins(p, k), 0) / keys.length);
   return `
@@ -82,8 +114,8 @@ function planView(id) {
   <div class="card">
     <h2>Your week</h2>
     <div class="week-plan">${p.schedule.map((k, i) => `<div class="wp ${k ? 'on' : ''} ${i === ti ? 'today' : ''}"><span>${DAY_NAMES[i]}</span><b>${k ? esc(p.days[k].name.split(' (')[0]) : 'Rest'}</b></div>`).join('')}</div>
-    ${active ? `<button class="btn btn-danger-ghost btn-block" data-act="plan-stop">Stop following this plan</button>`
-      : `<button class="btn btn-primary btn-block" data-act="plan-follow" data-id="${p.id}">${icon('check')} Follow this plan</button>`}
+    ${active ? `<button class="btn btn-danger-ghost btn-block" data-act="plan-stop" data-id="${p.id}">Stop following this plan</button>`
+      : `${others.length ? `<p class="muted small">You're also following ${others.map((o) => `<b>${esc(o.name)}</b>`).join(' and ')}. This plan will be added alongside.</p>` : ''}${note ? `<p class="plan-note">${esc(note)}</p>` : ''}<button class="btn btn-primary btn-block" data-act="plan-follow" data-id="${p.id}">${icon('check')} ${others.length ? 'Also follow this plan' : 'Follow this plan'}</button>`}
   </div>
   ${keys.map((k) => { const d = p.days[k]; return `
   <div class="card plan-day">
@@ -303,10 +335,16 @@ export function onPickerInput(input) {
 export const actions = {
   'body-side': (el) => { bodySide = el.dataset.side; rerender(); },
   'plan-follow': (el) => {
-    state.plan = { id: el.dataset.id, start: todayKey() }; save();
+    state.plans ||= [];
+    if (!state.plans.some((x) => x.id === el.dataset.id)) state.plans.push({ id: el.dataset.id, start: todayKey() });
+    save();
     toast('Plan started — today\'s workout will show on Today'); rerender();
   },
-  'plan-stop': () => { if (!confirm('Stop following this plan? Your workout history is kept.')) return; state.plan = null; save(); rerender(); },
+  'plan-stop': (el) => {
+    const p = findPlan(el.dataset.id);
+    if (!confirm('Stop following ' + (p ? p.name : 'this plan') + '? Your workout history is kept.')) return;
+    state.plans = (state.plans || []).filter((x) => x.id !== el.dataset.id); save(); rerender();
+  },
   'plan-start': (el) => { const p = findPlan(el.dataset.id); if (p) startRoutine(planDayRoutine(p, el.dataset.day)); },
   part: (el) => { filters.kind = 'all'; filters.eq = 'all'; go('#/move/part/' + el.dataset.part); },
   filter: (el) => { filters[el.dataset.f] = el.dataset.v; rerender(); },

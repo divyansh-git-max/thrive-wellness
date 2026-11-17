@@ -445,3 +445,15 @@ html[data-layout="web"] .plan-day .plan-ex { grid-template-columns: repeat(2, mi
 html[data-layout="web"] .plan-day .btn-block { width: auto; }
 @media (max-width: 959px) { html[data-layout="web"] .plan-day .plan-ex { grid-template-columns: 1fr; } }
 html[data-layout="web"] .wp span { font-size: 12px; } html[data-layout="web"] .wp b { font-size: 13px; font-weight: 500; }
+/* Multiple plans */
+html[data-layout="web"] .link-btn { color: var(--error); font-weight: 500; text-decoration: underline; text-decoration-color: var(--error-bg); text-underline-offset: 3px; }
+html[data-layout="web"] .plan-note { background: var(--warning-bg); color: var(--body); border-radius: var(--r-item); }
+html[data-layout="web"] .week-plan.combined .wp b { font-size: 12px; font-weight: 500; border-radius: var(--r-control); border: 1px solid var(--line-1); }
+html[data-layout="web"] .week-plan.combined .wp:not(.on) b { border: 0; }
+html[data-layout="web"] #main > .plan-week-card { column-span: all; }
+html[data-layout="web"] #main:has(> .plan-now + .plan-now) > .plan-now { column-span: none; }
+html[data-layout="web"] .week-plan.combined { grid-template-columns: repeat(7, 1fr); gap: 4px; }
+html[data-layout="web"] .week-plan.combined .wp { flex-direction: column; align-items: center; justify-content: flex-start; min-height: 74px; padding: 8px 4px; gap: 4px; text-align: center; }
+html[data-layout="web"] .week-plan.combined .wp span { width: auto; }
+html[data-layout="web"] .week-plan.combined .wp b { display: block; width: 100%; padding: 2px 4px; }
+@media (max-width: 959px) { html[data-layout="web"] .week-plan.combined { grid-template-columns: 1fr; } html[data-layout="web"] .week-plan.combined .wp { flex-direction: row; min-height: 0; text-align: left; } html[data-layout="web"] .week-plan.combined .wp span { width: 36px; } html[data-layout="web"] .week-plan.combined .wp b { display: inline-block; width: auto; } }

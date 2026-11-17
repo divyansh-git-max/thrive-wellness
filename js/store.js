@@ -21,9 +21,17 @@ function defaults() {
     days: {},       // 'YYYY-MM-DD' -> day record
     metrics: [],    // [{ date, weight, waist, hips, chest, arm, bodyFat, rhr }]
     routines: [],   // custom routines
-    plan: null,     // { id, start } of the plan being followed
+    plans: [],      // [{ id, start }] plans being followed (you can follow several)
     recentMeals: [], // recently typed meal descriptions for quick re-log
   };
+}
+
+/** Upgrade older saved data (single followed plan -> list). */
+function migrate(st) {
+  if (!Array.isArray(st.plans)) st.plans = [];
+  if (st.plan && !st.plans.some((p) => p.id === st.plan.id)) st.plans.push(st.plan);
+  delete st.plan;
+  return st;
 }
 
 function load() {
@@ -31,7 +39,7 @@ function load() {
     const raw = localStorage.getItem(KEY);
     if (!raw) return defaults();
     const d = defaults(), s = JSON.parse(raw);
-    return { ...d, ...s, profile: { ...d.profile, ...s.profile }, settings: { ...d.settings, ...s.settings } };
+    return migrate({ ...d, ...s, profile: { ...d.profile, ...s.profile }, settings: { ...d.settings, ...s.settings } });
   } catch (e) {
     console.error('Could not load saved data', e);
     return defaults();
@@ -180,7 +188,7 @@ export function importData(text) {
   const data = parsed?.data ?? parsed;
   if (!data || typeof data !== 'object' || !data.days || !data.profile) throw new Error('This doesn\'t look like a Thrive backup file.');
   const d = defaults();
-  state = { ...d, ...data, profile: { ...d.profile, ...data.profile }, settings: { ...d.settings, ...data.settings } };
+  state = migrate({ ...d, ...data, profile: { ...d.profile, ...data.profile }, settings: { ...d.settings, ...data.settings } });
   flush();
 }
 export function resetAll() { state = defaults(); flush(); }

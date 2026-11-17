@@ -3,7 +3,7 @@ import { esc, icon, ring, MOODS, moodEmoji, fmtHours, plural } from '../ui.js';
 import { DAILY_TIPS } from '../data/mind.js';
 import { ROUTINES } from '../data/routines.js';
 import { routineMins, planDayMins } from '../sheets.js';
-import { todaysPlanDay } from './move.js';
+import { todaysPlanDays } from './move.js';
 import { daysPerWeek } from '../data/plans.js';
 import { rerender } from '../router.js';
 
@@ -33,7 +33,8 @@ export function view() {
   const mood = latestMood(k);
   const tip = DAILY_TIPS[dayIndex() % DAILY_TIPS.length];
   const sug = suggestion();
-  const plan = todaysPlanDay();
+  const planDays = todaysPlanDays();
+  const due = planDays.filter((t) => t.day);
   const meals = d.meals || {};
   const score = plateScore(k);
   const date = new Date().toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' });
@@ -73,18 +74,19 @@ export function view() {
   </div>` : ''}
 
   <div class="card c-move">
-    <div class="card-head"><h2>Move today</h2><a class="link" href="${plan ? '#/move/plan/' + plan.plan.id : '#/move/plans'}">${plan ? 'My plan' : 'Plans'}</a></div>
-    ${plan && plan.day ? `
-    <button class="routine-hero c-${plan.plan.color}" data-act="plan-start" data-id="${plan.plan.id}" data-day="${plan.key}">
-      <div><div class="eyebrow">${esc(plan.plan.name)} · ${plan.weekDone}/${daysPerWeek(plan.plan)} this week</div><b>${esc(plan.day.name)}${plan.doneToday ? ' ✓' : ''}</b><span>${plan.day.exercises.length} exercises · ~${planDayMins(plan.plan, plan.key)} min</span></div>
+    <div class="card-head"><h2>Move today</h2><a class="link" href="#/move/plans">${planDays.length ? (planDays.length > 1 ? 'My plans' : 'My plan') : 'Plans'}</a></div>
+    ${due.map((p) => `
+    <button class="routine-hero c-${p.plan.color}" data-act="plan-start" data-id="${p.plan.id}" data-day="${p.key}">
+      <div><div class="eyebrow">${esc(p.plan.name)} · ${p.weekDone}/${daysPerWeek(p.plan)} this week</div><b>${esc(p.day.name)}${p.doneToday ? ' ✓' : ''}</b><span>${p.day.exercises.length} exercises · ~${planDayMins(p.plan, p.key)} min</span></div>
       <span class="play-btn">${icon('play')}</span>
-    </button>` : `
-    ${plan ? `<p class="muted small plan-rest">😌 Rest day on <b>${esc(plan.plan.name)}</b>. Light movement helps recovery:</p>` : ''}
+    </button>`).join('')}
+    ${!due.length ? `
+    ${planDays.length ? `<p class="muted small plan-rest">😌 Rest day on ${planDays.map((p) => `<b>${esc(p.plan.name)}</b>`).join(' and ')}. Light movement helps recovery:</p>` : ''}
     <button class="routine-hero c-${sug.color}" data-act="routine-open" data-id="${sug.id}">
       <div><div class="eyebrow">Suggested</div><b>${esc(sug.name)}</b><span>${routineMins(sug)} min · ${esc(sug.level)}</span></div>
       <span class="play-btn">${icon('play')}</span>
     </button>
-    ${!plan ? `<a class="plan-nudge" href="#/move/plans">${icon('list')} Want a weekly plan with sets & reps? <b>Choose a plan</b></a>` : ''}`}
+    ${!planDays.length ? `<a class="plan-nudge" href="#/move/plans">${icon('list')} Want a weekly plan with sets & reps? <b>Choose one or more plans</b></a>` : ''}` : ''}
     <div class="btn-row">
       <button class="btn btn-soft btn-grow" data-act="activity-open">${icon('plus')} Log activity</button>
       <a class="btn btn-soft btn-grow" href="#/move">${icon('move')} Exercises</a>

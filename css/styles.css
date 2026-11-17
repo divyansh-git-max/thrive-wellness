@@ -693,3 +693,18 @@ img { display: block; max-width: 100%; }
 .skip-link { position: fixed; left: 12px; top: -64px; z-index: 100; padding: 10px 16px; background: var(--accent); color: var(--accent-ink); font-weight: 600; border-radius: 6px; transition: top .15s; }
 .skip-link:focus { top: 12px; }
 #main:focus { outline: none; }
+
+/* ============ Multiple plans ============ */
+.section-head.first { margin-top: 4px; }
+.plan-now-links { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; }
+.plan-now-links .link { margin-top: 0; }
+.link-btn { color: var(--danger); font-size: 13px; font-weight: 600; padding: 4px 0; }
+.plan-note { background: var(--progress-soft); border-radius: 12px; padding: 10px 12px; font-size: 13.5px; margin: 12px 0 0; }
+.week-plan.combined .wp { min-height: 74px; justify-content: flex-start; gap: 3px; }
+.week-plan.combined .wp b { display: block; width: 100%; font-size: 10px; line-height: 1.2; padding: 2px 1px; border-radius: 4px; background: var(--surface); }
+.week-plan.combined .wp:not(.on) b { background: none; }
+/* Mobile: combined week as a list (one row per day) so names never break mid-word */
+.week-plan.combined { grid-template-columns: 1fr; gap: 6px; }
+.week-plan.combined .wp { flex-direction: row; align-items: center; justify-content: flex-start; min-height: 0; padding: 8px 10px; gap: 6px; flex-wrap: wrap; text-align: left; }
+.week-plan.combined .wp span { width: 36px; flex: none; font-size: 12px; }
+.week-plan.combined .wp b { display: inline-block; width: auto; font-size: 12.5px; padding: 3px 8px; }
