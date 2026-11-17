@@ -1,5 +1,6 @@
 import { EXERCISES } from './data/exercises.js';
 import { mountFigure } from './figure.js';
+import { PHOSPHOR } from './data/phosphor.js';
 import { parseKey, todayKey, addDays } from './store.js';
 
 // ---------- basics ----------
@@ -52,7 +53,10 @@ const P = {
   monitor: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
   phone: '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>',
 };
-export const icon = (name, cls = '') => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true">${P[name] || ''}</svg>`;
+/** Web view uses Phosphor bold icons (filled, 256 grid); mobile keeps the original stroke icons. */
+export const icon = (name, cls = '') => (document.documentElement.dataset.layout === 'web' && PHOSPHOR[name]
+  ? `<svg class="ic ph ${cls}" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">${PHOSPHOR[name]}</svg>`
+  : `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true">${P[name] || ''}</svg>`);
 
 // ---------- formatting ----------
 const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

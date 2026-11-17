@@ -6,7 +6,7 @@ import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const SHELL_DIRS = ['css', 'js', 'icons'];
+const SHELL_DIRS = ['css', 'js', 'icons', 'fonts'];
 const SHELL_FILES = ['index.html', 'manifest.webmanifest'];
 
 async function walk(dir) {

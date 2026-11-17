@@ -14,6 +14,7 @@ const NAV = [['today', 'Today', 'home'], ['move', 'Move', 'move'], ['nourish', '
 const ACTIONS = {
   ...sheetActions, ...today.actions, ...move.actions, ...nourish.actions, ...mind.actions, ...progress.actions, ...settings.actions,
   nav: (el) => { location.hash = el.dataset.href; },
+  skip: () => { main.focus(); main.scrollIntoView(); },
 };
 
 const main = document.getElementById('main');

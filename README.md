@@ -27,13 +27,17 @@ Settings: name, height, goals, habit editor, **view (Auto / Mobile / Web)**, the
 
 **Views:** *Mobile* is the phone layout (light, dark or auto theme). *Web* is a desktop layout with a sidebar, two-column cards and centred dialogs, and is always light. *Auto* picks Web on screens 1000px or wider. Switch any time from the sidebar, the Today header or Settings.
 
+**Web view design** (`css/web.css`): calm, editorial system — Jost for UI and Source Serif 4 for page titles (both self-hosted in `fonts/`, SIL OFL), one accent colour (#008254) with a mint tint ladder, thin 1px lines instead of shadows, near-square corners (2/4/8/16px), Phosphor bold icons (MIT, built by `tools/build-icons.mjs`), 236px side panel that stacks on top below 960px, skip link and 2px focus ring, reduced-motion support. Mobile view keeps its own look.
+
 **Food data:** checked against USDA FoodData Central (SR Legacy) — macros and listed vitamins/minerals match within rounding. Indian foods not in USDA (paneer, soya chunks, amla, ragi, roti) use IFCT-based figures and are labelled approximate; whey uses typical label values. Each food shows its source. Health tips were checked against published research and worded to match the strength of the evidence.
 
 ## Project layout
 
 ```
 index.html, manifest.webmanifest, sw.js, precache.js   app shell, PWA, offline cache
-css/styles.css                                          design system (light + dark)
+css/styles.css                                          mobile design system (light + dark)
+css/web.css                                             web (desktop) view design system
+fonts/                                                  self-hosted Jost + Source Serif 4
 js/app.js            router, navigation, event delegation, onboarding
 js/store.js          data model + localStorage persistence
 js/ui.js             icons, sheets, toasts, charts, exercise media helpers
